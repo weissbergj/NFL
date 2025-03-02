@@ -1,0 +1,260 @@
+trying URL 'https://cloud.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/nflreadr_1.4.1.tgz'
+Content type 'application/x-gzip' length 1150872 bytes (1.1 MB)
+==================================================
+downloaded 1.1 MB
+
+
+The downloaded binary packages are in
+	/var/folders/wt/rppj7xyd1bv49pmr3xl3r1mm0000gn/T//RtmpRzh1P6/downloaded_packages
+trying URL 'https://cloud.r-project.org/bin/macosx/big-sur-arm64/contrib/4.4/dplyr_1.1.4.tgz'
+Content type 'application/x-gzip' length 1599250 bytes (1.5 MB)
+==================================================
+downloaded 1.5 MB
+
+
+The downloaded binary packages are in
+	/var/folders/wt/rppj7xyd1bv49pmr3xl3r1mm0000gn/T//RtmpRzh1P6/downloaded_packages
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+=== HEAD OF DF_WEEKLY ===
+── nflverse player stats: offense ──────────────────────────────────────────────
+ℹ Data updated: 2025-02-28 04:28:44 EST
+# A tibble: 6 × 53
+  player_id player_name player_display_name position position_group headshot_url
+  <chr>     <chr>       <chr>               <chr>    <chr>          <chr>       
+1 00-00195… T.Brady     Tom Brady           QB       QB             https://sta…
+2 00-00195… T.Brady     Tom Brady           QB       QB             https://sta…
+3 00-00195… T.Brady     Tom Brady           QB       QB             https://sta…
+4 00-00195… T.Brady     Tom Brady           QB       QB             https://sta…
+5 00-00195… T.Brady     Tom Brady           QB       QB             https://sta…
+6 00-00195… T.Brady     Tom Brady           QB       QB             https://sta…
+# ℹ 47 more variables: recent_team <chr>, season <int>, week <int>,
+#   season_type <chr>, opponent_team <chr>, completions <int>, attempts <int>,
+#   passing_yards <dbl>, passing_tds <int>, interceptions <dbl>, sacks <dbl>,
+#   sack_yards <dbl>, sack_fumbles <int>, sack_fumbles_lost <int>,
+#   passing_air_yards <dbl>, passing_yards_after_catch <dbl>,
+#   passing_first_downs <dbl>, passing_epa <dbl>,
+#   passing_2pt_conversions <int>, pacr <dbl>, dakota <dbl>, carries <int>, …
+
+=== STRUCTURE OF DF_WEEKLY ===
+nflvrs_d [5,631 × 53] (S3: nflverse_data/tbl_df/tbl/data.table/data.frame)
+ $ player_id                  : chr [1:5631] "00-0019596" "00-0019596" "00-0019596" "00-0019596" ...
+ $ player_name                : chr [1:5631] "T.Brady" "T.Brady" "T.Brady" "T.Brady" ...
+ $ player_display_name        : chr [1:5631] "Tom Brady" "Tom Brady" "Tom Brady" "Tom Brady" ...
+ $ position                   : chr [1:5631] "QB" "QB" "QB" "QB" ...
+ $ position_group             : chr [1:5631] "QB" "QB" "QB" "QB" ...
+ $ headshot_url               : chr [1:5631] "https://static.www.nfl.com/image/private/f_auto,q_auto/league/q7dpdlxyu5rs05rgh1le" "https://static.www.nfl.com/image/private/f_auto,q_auto/league/q7dpdlxyu5rs05rgh1le" "https://static.www.nfl.com/image/private/f_auto,q_auto/league/q7dpdlxyu5rs05rgh1le" "https://static.www.nfl.com/image/private/f_auto,q_auto/league/q7dpdlxyu5rs05rgh1le" ...
+ $ recent_team                : chr [1:5631] "TB" "TB" "TB" "TB" ...
+ $ season                     : int [1:5631] 2022 2022 2022 2022 2022 2022 2022 2022 2022 2022 ...
+ $ week                       : int [1:5631] 1 2 3 4 5 6 7 8 9 10 ...
+ $ season_type                : chr [1:5631] "REG" "REG" "REG" "REG" ...
+ $ opponent_team              : chr [1:5631] "DAL" "NO" "GB" "KC" ...
+ $ completions                : int [1:5631] 18 18 31 39 35 25 32 26 36 22 ...
+ $ attempts                   : int [1:5631] 27 34 42 52 52 40 49 44 58 29 ...
+ $ passing_yards              : num [1:5631] 212 190 271 385 351 243 290 325 280 258 ...
+ $ passing_tds                : int [1:5631] 1 1 1 3 1 1 0 1 1 2 ...
+ $ interceptions              : num [1:5631] 1 0 0 0 0 0 0 0 0 1 ...
+ $ sacks                      : num [1:5631] 2 1 3 1 0 2 1 3 1 0 ...
+ $ sack_yards                 : num [1:5631] 17 2 20 12 0 14 14 20 8 0 ...
+ $ sack_fumbles               : int [1:5631] 0 0 0 1 0 1 0 0 0 0 ...
+ $ sack_fumbles_lost          : int [1:5631] 0 0 0 1 0 0 0 0 0 0 ...
+ $ passing_air_yards          : num [1:5631] 305 314 236 326 362 302 359 288 271 248 ...
+ $ passing_yards_after_catch  : num [1:5631] 87 85 124 205 178 87 134 177 127 92 ...
+ $ passing_first_downs        : num [1:5631] 9 8 15 23 17 11 14 13 15 15 ...
+ $ passing_epa                : num [1:5631] 1.05 2.43 1.08 9.51 12.99 ...
+ $ passing_2pt_conversions    : int [1:5631] 0 0 0 0 1 0 0 0 0 0 ...
+ $ pacr                       : num [1:5631] 0.695 0.605 1.148 1.181 0.97 ...
+ $ dakota                     : num [1:5631] 0.0756 -0.0221 0.086 0.1537 0.1569 ...
+ $ carries                    : int [1:5631] 2 3 1 0 3 1 1 1 0 6 ...
+ $ rushing_yards              : num [1:5631] -1 -2 -1 0 -3 0 1 1 0 -3 ...
+ $ rushing_tds                : int [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ rushing_fumbles            : num [1:5631] 0 1 0 0 0 0 0 0 0 0 ...
+ $ rushing_fumbles_lost       : num [1:5631] 0 1 0 0 0 0 0 0 0 0 ...
+ $ rushing_first_downs        : num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ rushing_epa                : num [1:5631] -1.44 -7.12 0 NA -3.34 ...
+ $ rushing_2pt_conversions    : int [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receptions                 : int [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ targets                    : int [1:5631] 0 0 0 0 0 0 0 0 0 1 ...
+ $ receiving_yards            : num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receiving_tds              : int [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receiving_fumbles          : num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receiving_fumbles_lost     : num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receiving_air_yards        : num [1:5631] 0 0 0 0 0 0 0 0 0 16 ...
+ $ receiving_yards_after_catch: num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receiving_first_downs      : num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ receiving_epa              : num [1:5631] NA NA NA NA NA ...
+ $ receiving_2pt_conversions  : int [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ racr                       : num [1:5631] NA NA NA NA NA NA NA NA NA 0 ...
+ $ target_share               : num [1:5631] NA NA NA NA NA ...
+ $ air_yards_share            : num [1:5631] NA NA NA NA NA ...
+ $ wopr                       : num [1:5631] NA NA NA NA NA ...
+ $ special_teams_tds          : num [1:5631] 0 0 0 0 0 0 0 0 0 0 ...
+ $ fantasy_points             : num [1:5631] 10.4 9.4 14.7 25.4 19.7 ...
+ $ fantasy_points_ppr         : num [1:5631] 10.4 9.4 14.7 25.4 19.7 ...
+ - attr(*, "nflfastR_version")= chr "5.0.0.9002"
+ - attr(*, "nflverse_type")= chr "player stats: offense"
+ - attr(*, "nflverse_timestamp")= chr "2025-02-28 04:28:44 EST"
+
+=== SAMPLE SUMMARY STATS ===
+  player_id         player_name        player_display_name   position        
+ Length:5631        Length:5631        Length:5631         Length:5631       
+ Class :character   Class :character   Class :character    Class :character  
+ Mode  :character   Mode  :character   Mode  :character    Mode  :character  
+                                                                             
+                                                                             
+                                                                             
+                                                                             
+ position_group     headshot_url       recent_team            season    
+ Length:5631        Length:5631        Length:5631        Min.   :2022  
+ Class :character   Class :character   Class :character   1st Qu.:2022  
+ Mode  :character   Mode  :character   Mode  :character   Median :2022  
+                                                          Mean   :2022  
+                                                          3rd Qu.:2022  
+                                                          Max.   :2022  
+                                                                        
+      week        season_type        opponent_team       completions    
+ Min.   : 1.000   Length:5631        Length:5631        Min.   : 0.000  
+ 1st Qu.: 5.000   Class :character   Class :character   1st Qu.: 0.000  
+ Median :10.000   Mode  :character   Mode  :character   Median : 0.000  
+ Mean   : 9.938                                         Mean   : 2.166  
+ 3rd Qu.:15.000                                         3rd Qu.: 0.000  
+ Max.   :22.000                                         Max.   :43.000  
+                                                                        
+    attempts      passing_yards     passing_tds    interceptions    
+ Min.   : 0.000   Min.   : -3.00   Min.   :0.000   Min.   :0.00000  
+ 1st Qu.: 0.000   1st Qu.:  0.00   1st Qu.:0.000   1st Qu.:0.00000  
+ Median : 0.000   Median :  0.00   Median :0.000   Median :0.00000  
+ Mean   : 3.375   Mean   : 23.68   Mean   :0.141   Mean   :0.07743  
+ 3rd Qu.: 0.000   3rd Qu.:  0.00   3rd Qu.:0.000   3rd Qu.:0.00000  
+ Max.   :68.000   Max.   :481.00   Max.   :6.000   Max.   :4.00000  
+                                                                    
+     sacks          sack_yards      sack_fumbles    sack_fumbles_lost
+ Min.   :0.0000   Min.   : 0.000   Min.   :0.0000   Min.   :0.00000  
+ 1st Qu.:0.0000   1st Qu.: 0.000   1st Qu.:0.0000   1st Qu.:0.00000  
+ Median :0.0000   Median : 0.000   Median :0.0000   Median :0.00000  
+ Mean   :0.2408   Mean   : 1.587   Mean   :0.0325   Mean   :0.01527  
+ 3rd Qu.:0.0000   3rd Qu.: 0.000   3rd Qu.:0.0000   3rd Qu.:0.00000  
+ Max.   :9.0000   Max.   :61.000   Max.   :3.0000   Max.   :3.00000  
+                                                                     
+ passing_air_yards passing_yards_after_catch passing_first_downs
+ Min.   :-17.00    Min.   :  0.00            Min.   : 0.000     
+ 1st Qu.:  0.00    1st Qu.:  0.00            1st Qu.: 0.000     
+ Median :  0.00    Median :  0.00            Median : 0.000     
+ Mean   : 26.16    Mean   : 11.07            Mean   : 1.139     
+ 3rd Qu.:  0.00    3rd Qu.:  0.00            3rd Qu.: 0.000     
+ Max.   :608.00    Max.   :280.00            Max.   :23.000     
+                                                                
+  passing_epa      passing_2pt_conversions      pacr           dakota      
+ Min.   :-29.429   Min.   :0.000000        Min.   :0.000   Min.   :-0.167  
+ 1st Qu.: -4.776   1st Qu.:0.000000        1st Qu.:0.691   1st Qu.: 0.015  
+ Median :  0.097   Median :0.000000        Median :0.902   Median : 0.072  
+ Mean   :  0.474   Mean   :0.007636        Mean   :0.944   Mean   : 0.088  
+ 3rd Qu.:  5.661   3rd Qu.:0.000000        3rd Qu.:1.152   3rd Qu.: 0.153  
+ Max.   : 33.189   Max.   :1.000000        Max.   :5.000   Max.   : 0.440  
+ NA's   :4938                              NA's   :4946    NA's   :5024    
+    carries       rushing_yards     rushing_tds      rushing_fumbles  
+ Min.   : 0.000   Min.   :-26.00   Min.   :0.00000   Min.   :0.00000  
+ 1st Qu.: 0.000   1st Qu.:  0.00   1st Qu.:0.00000   1st Qu.:0.00000  
+ Median : 0.000   Median :  0.00   Median :0.00000   Median :0.00000  
+ Mean   : 2.743   Mean   : 12.22   Mean   :0.09164   Mean   :0.03889  
+ 3rd Qu.: 3.000   3rd Qu.: 11.00   3rd Qu.:0.00000   3rd Qu.:0.00000  
+ Max.   :35.000   Max.   :229.00   Max.   :4.00000   Max.   :2.00000  
+                                                                      
+ rushing_fumbles_lost rushing_first_downs  rushing_epa     
+ Min.   :0.00000      Min.   : 0.0000     Min.   :-11.742  
+ 1st Qu.:0.00000      1st Qu.: 0.0000     1st Qu.: -1.417  
+ Median :0.00000      Median : 0.0000     Median : -0.198  
+ Mean   :0.01669      Mean   : 0.6885     Mean   : -0.169  
+ 3rd Qu.:0.00000      3rd Qu.: 1.0000     3rd Qu.:  1.087  
+ Max.   :1.00000      Max.   :12.0000     Max.   : 17.357  
+                                          NA's   :3245     
+ rushing_2pt_conversions   receptions        targets       receiving_yards 
+ Min.   :0.000000        Min.   : 0.000   Min.   : 0.000   Min.   :-17.00  
+ 1st Qu.:0.000000        1st Qu.: 0.000   1st Qu.: 1.000   1st Qu.:  0.00  
+ Median :0.000000        Median : 1.000   Median : 2.000   Median : 12.00  
+ Mean   :0.003374        Mean   : 2.166   Mean   : 3.231   Mean   : 23.68  
+ 3rd Qu.:0.000000        3rd Qu.: 3.000   3rd Qu.: 5.000   3rd Qu.: 36.00  
+ Max.   :1.000000        Max.   :14.000   Max.   :19.000   Max.   :223.00  
+                                                                           
+ receiving_tds    receiving_fumbles receiving_fumbles_lost receiving_air_yards
+ Min.   :0.0000   Min.   :0.00000   Min.   :0.00000        Min.   :-28.00     
+ 1st Qu.:0.0000   1st Qu.:0.00000   1st Qu.:0.00000        1st Qu.:  0.00     
+ Median :0.0000   Median :0.00000   Median :0.00000        Median :  8.00     
+ Mean   :0.1408   Mean   :0.02344   Mean   :0.01421        Mean   : 25.27     
+ 3rd Qu.:0.0000   3rd Qu.:0.00000   3rd Qu.:0.00000        3rd Qu.: 38.00     
+ Max.   :4.0000   Max.   :2.00000   Max.   :1.00000        Max.   :334.00     
+                                                                              
+ receiving_yards_after_catch receiving_first_downs receiving_epa     
+ Min.   :-11.00              Min.   : 0.000        Min.   :-12.4144  
+ 1st Qu.:  0.00              1st Qu.: 0.000        1st Qu.: -0.9811  
+ Median :  5.00              Median : 1.000        Median :  0.3097  
+ Mean   : 11.07              Mean   : 1.139        Mean   :  0.6396  
+ 3rd Qu.: 16.00              3rd Qu.: 2.000        3rd Qu.:  2.1424  
+ Max.   :130.00              Max.   :10.000        Max.   : 16.1744  
+                                                   NA's   :1084      
+ receiving_2pt_conversions      racr           target_share   
+ Min.   :0.000000          Min.   :-49.0000   Min.   :0.0161  
+ 1st Qu.:0.000000          1st Qu.:  0.0000   1st Qu.:0.0500  
+ Median :0.000000          Median :  0.7679   Median :0.1000  
+ Mean   :0.007636          Mean   :  0.8820   Mean   :0.1249  
+ 3rd Qu.:0.000000          3rd Qu.:  1.3590   3rd Qu.:0.1786  
+ Max.   :1.000000          Max.   : 96.0000   Max.   :0.5312  
+                           NA's   :1110       NA's   :1084    
+ air_yards_share        wopr         special_teams_tds  fantasy_points  
+ Min.   :-0.8421   Min.   :-0.0782   Min.   :0.000000   Min.   :-3.040  
+ 1st Qu.: 0.0107   1st Qu.: 0.0949   1st Qu.:0.000000   1st Qu.: 1.100  
+ Median : 0.0707   Median : 0.2005   Median :0.000000   Median : 3.800  
+ Mean   : 0.1249   Mean   : 0.2748   Mean   :0.002486   Mean   : 6.302  
+ 3rd Qu.: 0.2067   3rd Qu.: 0.4022   3rd Qu.:0.000000   3rd Qu.: 9.700  
+ Max.   : 1.8421   Max.   : 1.7895   Max.   :2.000000   Max.   :51.100  
+ NA's   :1084      NA's   :1084                                         
+ fantasy_points_ppr
+ Min.   :-3.040    
+ 1st Qu.: 2.100    
+ Median : 6.300    
+ Mean   : 8.468    
+ 3rd Qu.:12.900    
+ Max.   :55.100    
+                   
+
+=== TOP 10 PLAYERS BY TOTAL RECEPTIONS ===
+# A tibble: 10 × 2
+   player_display_name total_rec
+   <chr>                   <int>
+ 1 Travis Kelce              137
+ 2 Justin Jefferson          135
+ 3 Tyreek Hill               126
+ 4 CeeDee Lamb               121
+ 5 Stefon Diggs              119
+ 6 Chris Godwin              114
+ 7 DeVonta Smith             110
+ 8 Austin Ekeler             109
+ 9 Ja'Marr Chase             107
+10 Amon-Ra St. Brown         106
+
+=== SUMMARY BY POSITION ===
+# A tibble: 12 × 5
+   position total_receptions total_rushing_yds total_receiving_yds
+   <chr>               <int>             <dbl>               <dbl>
+ 1 WR                   6845              3029               85738
+ 2 TE                   2663               108               28058
+ 3 RB                   2575             54113               18711
+ 4 FB                     91               108                 682
+ 5 QB                     18             11430                  77
+ 6 CB                      4                 0                  78
+ 7 ILB                     2                 7                  16
+ 8 T                       1                 0                   9
+ 9 FS                      0                52                   0
+10 OLB                     0                 0                   0
+11 P                       0               -21                   0
+12 SS                      0                 7                   0
+# ℹ 1 more variable: total_touchdowns <int>
