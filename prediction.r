@@ -9,7 +9,7 @@
 # 
 # 1) Installs/Loads needed packages.
 # 2) Loads NFL data (2010-2022) and aggregates by player-season.
-# 3) Merges each season's stats with the FOLLOWING season's PPR => truly predictive.
+# 3) Merges each season's stats with the FOLLOWING season's PPR => predictive.
 # 4) Performs year-based splits (cross-validation by year) + final single test on 2022.
 # 5) Fits:
 #     (a) Linear Regression
@@ -77,7 +77,7 @@ df_season <- df_raw %>%
   # filter to main positions only:
   filter(position %in% c("QB","RB","WR","TE"))
 
-cat("\n=== Creating Next-Season PPR Column (Truly Predictive) ===\n")
+cat("\n=== Creating Next-Season PPR Column (Predictive) ===\n")
 # next-season approach:  merge "this season" stats with next season's PPR
 df_next <- df_season %>%
   mutate(next_season = season + 1) %>%
