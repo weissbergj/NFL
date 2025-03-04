@@ -1,0 +1,250 @@
+Rscript Robust.R
+
+=== 1) LOADING MULTI-YEAR NFL DATA (2010-2022) ===
+
+=== Aggregating Each Player's Season Stats ===
+
+=== Creating Next-Season PPR Column (Predictive) ===
+
+Head of 'df_predict' dataset:
+# A tibble: 6 × 19
+  player_id  player_display_name position season passing_yards passing_tds
+  <chr>      <chr>               <chr>     <int>         <dbl>       <int>
+1 00-0000865 Charlie Batch       QB         2010           352           3
+2 00-0000865 Charlie Batch       QB         2011           208           0
+3 00-0002110 Mark Brunell        QB         2010           117           2
+4 00-0003292 Kerry Collins       QB         2010          1823          14
+5 00-0004161 Jake Delhomme       QB         2010           872           2
+6 00-0004541 Donald Driver       WR         2010             0           0
+# ℹ 13 more variables: interceptions <dbl>, carries <int>, rushing_yards <dbl>,
+#   rushing_tds <int>, receptions <int>, receiving_yards <dbl>,
+#   receiving_tds <int>, ppr_this_season <dbl>, completions <int>,
+#   pass_attempts <int>, fumbles_total <dbl>, next_season <dbl>,
+#   ppr_next_season <dbl>
+
+=== Adding Additional / Advanced Features (Placeholders) ===
+
+===== CROSS-VAL for position: QB =====
+ -> POS: QB Test year: 2011  Train size: 58  Test size: 51 
+ -> POS: QB Test year: 2012  Train size: 109  Test size: 53 
+ -> POS: QB Test year: 2013  Train size: 162  Test size: 58 
+ -> POS: QB Test year: 2014  Train size: 220  Test size: 60 
+ -> POS: QB Test year: 2015  Train size: 280  Test size: 53 
+ -> POS: QB Test year: 2016  Train size: 333  Test size: 57 
+ -> POS: QB Test year: 2017  Train size: 390  Test size: 51 
+ -> POS: QB Test year: 2018  Train size: 441  Test size: 51 
+ -> POS: QB Test year: 2019  Train size: 492  Test size: 58 
+ -> POS: QB Test year: 2020  Train size: 550  Test size: 62 
+ -> POS: QB Test year: 2021  Train size: 612  Test size: 68 
+
+===== CROSS-VAL for position: RB =====
+ -> POS: RB Test year: 2011  Train size: 91  Test size: 97 
+ -> POS: RB Test year: 2012  Train size: 188  Test size: 102 
+ -> POS: RB Test year: 2013  Train size: 290  Test size: 96 
+ -> POS: RB Test year: 2014  Train size: 386  Test size: 102 
+ -> POS: RB Test year: 2015  Train size: 488  Test size: 110 
+ -> POS: RB Test year: 2016  Train size: 598  Test size: 104 
+ -> POS: RB Test year: 2017  Train size: 702  Test size: 98 
+ -> POS: RB Test year: 2018  Train size: 800  Test size: 94 
+ -> POS: RB Test year: 2019  Train size: 894  Test size: 109 
+ -> POS: RB Test year: 2020  Train size: 1003  Test size: 115 
+ -> POS: RB Test year: 2021  Train size: 1118  Test size: 110 
+
+===== CROSS-VAL for position: WR =====
+ -> POS: WR Test year: 2011  Train size: 153  Test size: 145 
+ -> POS: WR Test year: 2012  Train size: 298  Test size: 144 
+ -> POS: WR Test year: 2013  Train size: 442  Test size: 136 
+ -> POS: WR Test year: 2014  Train size: 578  Test size: 140 
+ -> POS: WR Test year: 2015  Train size: 718  Test size: 141 
+ -> POS: WR Test year: 2016  Train size: 859  Test size: 147 
+ -> POS: WR Test year: 2017  Train size: 1006  Test size: 147 
+ -> POS: WR Test year: 2018  Train size: 1153  Test size: 150 
+ -> POS: WR Test year: 2019  Train size: 1303  Test size: 159 
+ -> POS: WR Test year: 2020  Train size: 1462  Test size: 174 
+ -> POS: WR Test year: 2021  Train size: 1636  Test size: 171 
+
+===== CROSS-VAL for position: TE =====
+ -> POS: TE Test year: 2011  Train size: 80  Test size: 82 
+ -> POS: TE Test year: 2012  Train size: 162  Test size: 81 
+ -> POS: TE Test year: 2013  Train size: 243  Test size: 80 
+ -> POS: TE Test year: 2014  Train size: 323  Test size: 87 
+ -> POS: TE Test year: 2015  Train size: 410  Test size: 81 
+ -> POS: TE Test year: 2016  Train size: 491  Test size: 85 
+ -> POS: TE Test year: 2017  Train size: 576  Test size: 83 
+ -> POS: TE Test year: 2018  Train size: 659  Test size: 90 
+ -> POS: TE Test year: 2019  Train size: 749  Test size: 94 
+ -> POS: TE Test year: 2020  Train size: 843  Test size: 91 
+ -> POS: TE Test year: 2021  Train size: 934  Test size: 90 
+There were 44 warnings (use warnings() to see them)
+
+=== CV Results for QB ===
+   test_year    mse_lm mse_lasso mse_ridge mse_elastic    mse_rf   mse_xgb
+1       2011 11328.896  5787.640  6615.858    6913.752  6042.524  9365.272
+2       2012  5914.533  5798.024  5842.048    5643.195  6409.174  7302.355
+3       2013  6558.690  6291.818  6273.109    6264.903  5283.209  5736.159
+4       2014  9303.273  9405.764  8811.442    9179.714 10809.124 11193.402
+5       2015  5515.119  5829.864  5738.461    5768.224  5311.628  5836.070
+6       2016  6643.496  6118.004  5960.695    6038.181  6362.015  7523.476
+7       2017 10477.588 10379.610 10652.618   10475.123 10584.371 10737.008
+8       2018 10935.710 10633.215 10852.220   10607.834 11173.011 11594.860
+9       2019 10370.818 10534.324 10179.574   10573.389  9484.700 10295.872
+10      2020  7310.375  7581.314  7434.346    7315.597  8581.963  9274.394
+11      2021  6470.006  6559.481  6308.359    6446.925  7197.209  7763.331
+   best_model
+1       lasso
+2     elastic
+3          rf
+4       ridge
+5          rf
+6       ridge
+7       lasso
+8     elastic
+9          rf
+10         lm
+11      ridge
+
+=== CV Results for RB ===
+   test_year   mse_lm mse_lasso mse_ridge mse_elastic   mse_rf  mse_xgb
+1       2011 4977.036  4712.349  4420.143    4482.780 4384.620 5082.105
+2       2012 5701.589  5484.080  5372.888    5529.431 5803.390 6652.238
+3       2013 6472.820  6268.020  6174.531    6197.541 6588.250 7137.089
+4       2014 5883.168  5742.948  5832.408    5765.341 5813.069 5990.797
+5       2015 6202.097  6297.373  6201.161    6261.618 6758.342 6874.675
+6       2016 4112.577  4148.339  4225.249    4127.162 4143.923 4290.156
+7       2017 6586.079  6488.199  6424.392    6501.042 7275.425 7729.948
+8       2018 5301.382  5511.261  5440.809    5538.163 5901.754 6249.855
+9       2019 4976.371  4901.251  4903.519    4926.896 5304.920 5072.758
+10      2020 4237.394  4253.373  4309.257    4257.676 4241.035 4462.160
+11      2021 5421.149  5407.694  5387.213    5400.734 5417.138 5456.038
+   best_model
+1          rf
+2       ridge
+3       ridge
+4       lasso
+5       ridge
+6          lm
+7       ridge
+8          lm
+9       lasso
+10         lm
+11      ridge
+
+=== CV Results for WR ===
+   test_year   mse_lm mse_lasso mse_ridge mse_elastic   mse_rf  mse_xgb
+1       2011 5464.112  5430.704  5300.321    5365.370 5263.388 5720.987
+2       2012 5136.899  5083.851  5096.059    5089.148 6096.413 6864.698
+3       2013 4772.628  4794.813  4767.955    4784.652 5354.255 5392.165
+4       2014 4765.854  4718.865  4814.179    4736.145 4701.502 4913.383
+5       2015 4554.679  4514.799  4482.600    4512.984 4792.224 4832.326
+6       2016 3620.857  3606.442  3625.497    3607.717 3639.493 3683.645
+7       2017 4229.181  4245.662  4267.578    4238.928 4593.207 4370.569
+8       2018 3780.626  3792.693  3773.016    3796.894 3611.209 3599.525
+9       2019 4298.854  4332.976  4315.612    4340.475 4497.952 4730.419
+10      2020 4898.654  4907.323  4952.531    4898.935 5254.693 5253.253
+11      2021 3476.048  3463.362  3506.247    3469.307 3642.526 3329.358
+   best_model
+1          rf
+2       lasso
+3       ridge
+4          rf
+5       ridge
+6       lasso
+7          lm
+8         xgb
+9          lm
+10         lm
+11        xgb
+
+=== CV Results for TE ===
+   test_year    mse_lm mse_lasso mse_ridge mse_elastic   mse_rf  mse_xgb
+1       2011 18204.902  5866.438  4966.634   10585.016 3394.574 4425.009
+2       2012  2584.671  2939.278  2531.689    2918.676 3169.164 3519.837
+3       2013  2663.159  2626.064  2734.403    2640.638 3355.028 3564.740
+4       2014  3000.655  2935.192  3082.030    2975.515 3165.249 3451.044
+5       2015  2273.272  2050.078  2159.248    2016.247 2215.480 2413.095
+6       2016  2311.272  2209.736  2262.617    2254.728 2566.245 2472.033
+7       2017  2674.191  2667.375  2647.810    2624.721 2850.337 2784.037
+8       2018  2477.828  2402.626  2588.947    2393.682 2591.838 2621.835
+9       2019  2156.786  2338.044  2438.645    2284.895 2672.541 2674.171
+10      2020  2245.432  2304.001  2317.280    2294.354 2340.393 2200.249
+11      2021  1790.835  1862.466  1688.409    1856.237 1607.854 1500.157
+   best_model
+1          rf
+2       ridge
+3       lasso
+4       lasso
+5     elastic
+6       lasso
+7     elastic
+8     elastic
+9          lm
+10        xgb
+11        xgb
+
+=== FINAL TRAIN [2010..2020], TEST on 2021, per position ===
+
+--- Final Train/Pred for pos = QB  ---
+BEST model for QB is ridge with MSE = 6308.36 
+
+--- Final Train/Pred for pos = RB  ---
+BEST model for RB is ridge with MSE = 5387.21 
+
+--- Final Train/Pred for pos = WR  ---
+BEST model for WR is xgb with MSE = 3329.36 
+
+--- Final Train/Pred for pos = TE  ---
+BEST model for TE is xgb with MSE = 1500.16 
+Warning messages:
+1: In randomForest.default(x = x_train, y = y_train, ntree = curr_ntree,  :
+  invalid mtry: reset to within valid range
+2: In randomForest.default(x = x_train, y = y_train, ntree = curr_ntree,  :
+  invalid mtry: reset to within valid range
+3: In randomForest.default(x = x_train, y = y_train, ntree = curr_ntree,  :
+  invalid mtry: reset to within valid range
+4: In randomForest.default(x = x_train, y = y_train, ntree = curr_ntree,  :
+  invalid mtry: reset to within valid range
+
+=== COMBINING PREDICTIONS FOR ALL POSITIONS ===
+
+=== FINAL TOP 10 (ANY POSITION, BY predicted_ppr) ===
+# A tibble: 10 × 5
+   pred_rank_all player_display_name position ppr_next_season predicted_ppr
+           <int> <chr>               <chr>              <dbl>         <dbl>
+ 1             1 Josh Allen          QB                  435.          393.
+ 2             2 Patrick Mahomes     QB                  478.          375.
+ 3             3 Tom Brady           QB                  294.          346.
+ 4             4 Travis Kelce        TE                  393           343.
+ 5             5 Matthew Stafford    QB                  108.          337.
+ 6             6 Ja'Marr Chase       WR                  297.          311.
+ 7             7 Justin Herbert      QB                  297.          310.
+ 8             8 Davante Adams       WR                  336.          308.
+ 9             9 Joe Burrow          QB                  407.          304.
+10            10 Tyreek Hill         WR                  358.          302.
+
+=== ACTUAL TOP 10 (ANY POSITION) ===
+# A tibble: 10 × 5
+   actual_rank_all player_display_name position ppr_next_season predicted_ppr
+             <int> <chr>               <chr>              <dbl>         <dbl>
+ 1               1 Patrick Mahomes     QB                  478.          375.
+ 2               2 Jalen Hurts         QB                  458.          286.
+ 3               3 Josh Allen          QB                  435.          393.
+ 4               4 Christian McCaffrey RB                  416.          112.
+ 5               5 Joe Burrow          QB                  407.          304.
+ 6               6 Travis Kelce        TE                  393           343.
+ 7               7 Austin Ekeler       RB                  391           222.
+ 8               8 Justin Jefferson    WR                  380.          262.
+ 9               9 Tyreek Hill         WR                  358.          302.
+10              10 Stefon Diggs        WR                  342.          197.
+
+Overlap in top-10 any-position: 5 players
+
+Points by predicted top-10: 3401.1 
+Points by actual top-10: 4057 
+Difference: 655.9 
+
+=== DRAFTING A STANDARD ROSTER (1 QB, 2 RB, 2 WR, 1 TE) BY predicted_ppr ===
+Model-based standard roster score: 1881.2 
+Actual best possible roster (same constraints) would have scored: 2415.7 
+Difference: 534.5 
+
+*** DONE ***

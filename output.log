@@ -1,37 +1,6 @@
 
 Attaching package: ‘dplyr’
 
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Loading required package: Matrix
-Loaded glmnet 4.1-8
-randomForest 4.7-1.2
-Type rfNews() to see new features/changes/bug fixes.
-
-Attaching package: ‘randomForest’
-
-The following object is masked from ‘package:ggplot2’:
-
-    margin
-
-The following object is masked from ‘package:dplyr’:
-
-    combine
-
-
-Attaching package: ‘xgboost’
-
-The following object is masked from ‘package:dplyr’:
-
-    slice
-
-
 === 1) LOADING MULTI-YEAR NFL DATA (2010-2022) ===
 
 === Aggregating Each Player's Season Stats ===

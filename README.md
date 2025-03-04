@@ -2,7 +2,73 @@
 
 **Authors:** Austin Bennett and Jared Weissberg
 
-In this repository, we analyze offensive player data in the NFL in R. Below is a brief description of each file:
+In this repository, we analyze offensive player data in the NFL in R. Final results are presented up front. We utilize a ... model.
+
+## Table 1. Final 2021 (Effecitvely 2022 Predictions) Holdout Results by Position
+
+| Pos | Best Model | MSE (2021) | RMSE (2021)† |
+|:-------:|:-------------:|---------------:|----------------:|
+| QB | Ridge         | 6308.36        | 79.45           |
+| RB  | Ridge         | 5387.21        | 73.41           |
+| WR  | XGB           | 3329.36        | 57.71           |
+| TE  | XGB           | 1500.16        | 38.73           |
+
+> **Notes**  
+> \* **Mean RMSE (CV)** is the root mean squared error averaged over 11 year-based folds (2011–2021).  
+> † **Final Test RMSE** is from training on 2010–2020 and testing on the 2021 data (predicting 2022 PPR).
+
+---
+
+## Table 2. Top-10 Predicted vs. Top-10 Actual (Any Position)
+
+### Top-10 Predicted
+
+| Pred. Rank | Player       | Pos | Actual PPR | Predicted PPR |
+|---------------:|:-----------------|:-------:|---------------:|-------------------:|
+| 1              | Josh Allen       | QB      | 435            | 393               |
+| 2              | Patrick Mahomes  | QB      | 478            | 375               |
+| 3              | Tom Brady        | QB      | 294            | 346               |
+| 4              | Travis Kelce     | TE      | 393            | 343               |
+| 5              | Matthew Stafford | QB      | 108            | 337               |
+| 6              | Ja'Marr Chase    | WR      | 297            | 311               |
+| 7              | Justin Herbert   | QB      | 297            | 310               |
+| 8              | Davante Adams    | WR      | 336            | 308               |
+| 9              | Joe Burrow       | QB      | 407            | 304               |
+| 10             | Tyreek Hill      | WR      | 358            | 302               |
+
+### Top-10 Actual
+
+| Actual Rank | Player            | Pos | Actual PPR | Predicted PPR |
+|----------------:|:----------------------|:-------:|---------------:|-------------------:|
+| 1               | Patrick Mahomes       | QB      | 478            | 375               |
+| 2               | Jalen Hurts           | QB      | 458            | 286               |
+| 3               | Josh Allen            | QB      | 435            | 393               |
+| 4               | Christian McCaffrey   | RB      | 416            | 112               |
+| 5               | Joe Burrow            | QB      | 407            | 304               |
+| 6               | Travis Kelce          | TE      | 393            | 343               |
+| 7               | Austin Ekeler         | RB      | 391            | 222               |
+| 8               | Justin Jefferson      | WR      | 380            | 262               |
+| 9               | Tyreek Hill           | WR      | 358            | 302               |
+| 10              | Stefon Diggs          | WR      | 342            | 197               |
+
+**Overlap in Top-10**: 5 players  
+**Points by predicted Top-10**: 3401.1  
+**Points by actual Top-10**: 4057.0  
+**Difference**: 655.9  
+
+---
+
+## Table 3. “Standard Roster” (1 QB, 2 RB, 2 WR, 1 TE) Comparison (Predicted vs. Actual)
+
+| Roster               | Score |
+|:------------------------:|----------:|
+| Model’s Predicted    | 1881.2    |
+| Best Actual          | 2415.7    |
+| Difference           | 534.5     |
+
+---
+
+Below is a brief description of each file:
 
 - [**summary_stats.R**](https://github.com/weissbergj/NFL/blob/main/summary_stats.R)  
   Provides initial data visualizations and summary statistics for 2022 weekly data.
@@ -16,19 +82,36 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 - [**prediction.R**](https://github.com/weissbergj/NFL/blob/main/prediction.R)  
   A first attempt at predictive modeling using linear regression, LASSO, Ridge, random forest, and XGBoost. Results are logged in **output.log**.
 
+  - [**output.log**](https://github.com/weissbergj/NFL/blob/main/output.log)  
+  Contains the console output from running **prediction.R**.
+
 - [**prediction2.R**](https://github.com/weissbergj/NFL/blob/main/prediction2.R)  
   Extends the predictive approach with additional features and computes feature importance. It also builds and evaluates a team roster. Results are logged in **output2.log**.
-
-- [**output.log**](https://github.com/weissbergj/NFL/blob/main/output.log)  
-  Contains the console output from running **prediction.R**.
 
 - [**output2.log**](https://github.com/weissbergj/NFL/blob/main/output2.log)  
   Contains the console output from running **prediction2.R**.
 
+- [**robust.R**](https://github.com/weissbergj/NFL/blob/main/output.log)  
+  The final model script that does individual position equations along with more robust features (e.g., injuries) from other datasets.
+
+- [**robust1.log**](https://github.com/weissbergj/NFL/blob/main/robust1.log)  
+  Contains the console output from running **robust.R**.
+
+- [**robust2.R**](https://github.com/weissbergj/NFL/blob/main/obust2.R)  
+  An unsuccessful attempt to do a significantly more robust hyperparemeter sweep using caret along with ensembling.
+
+- [**robust2.log**](https://github.com/weissbergj/NFL/blob/main/robust2.log)  
+  Contains the console output from running **robust2.R**.
+
+- [**QB.R**](https://github.com/weissbergj/NFL/blob/main/QB.R)  
+  An unsuccessful attempt at adding QB-specific features to reduce MSE.
+
 - [**Rplots.pdf**](https://github.com/weissbergj/NFL/blob/main/Rplots.pdf)  
   Displays initial data visualizations, which are not highly informative.
 
-## 1) Results from `output.log` (First Predictive Approach, **RMSE**)
+Additional results from previous runs are below.
+
+## Table 4. Results from `output.log` (First Predictive Approach, **RMSE**)
 
 | Model         | Mean RMSE (CV)* | Final Test RMSE† |
 |---------------|-----------------|-------------------|
@@ -40,7 +123,7 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 
 ---
 
-## 2) Results from `output2.log` (Second Predictive Approach, **RMSE**)
+## Table 5. Results from `output2.log` (Second Predictive Approach, **RMSE**)
 
 | Model         | Mean RMSE (CV)* | Final Test RMSE† |
 |---------------|-----------------|-------------------|
@@ -51,13 +134,9 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 | RandomForest  | 70.63           | 64.89            |
 | XGBoost       | 73.29           | 66.87            |
 
-> **Notes**  
-> \* **Mean RMSE (CV)** is the root mean squared error averaged over 11 year-based folds (2011–2021).  
-> † **Final Test RMSE** is from training on 2010–2020 and testing on the 2021 data (predicting 2022 PPR).
-
 ---
 
-## 3) RMSE by Position (Second Predictive Approach on Final Test Set (2021 → 2022))
+## Table 6. RMSE by Position (Second Predictive Approach on Final Test Set (2021 → 2022))
 
 | Position | Linear | Lasso | Ridge | Elastic Net | RandomForest | XGBoost |
 |----------|-------:|------:|------:|-----------:|------------:|--------:|
@@ -70,7 +149,7 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 
 ---
 
-## 4) Top LASSO Coefficients by Absolute Value
+## Table 7. Top LASSO Coefficients by Absolute Value
 
 | Feature             | Coefficient   | Absolute Coefficient |
 |---------------------|--------------:|----------------------:|

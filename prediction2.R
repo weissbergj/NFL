@@ -15,8 +15,9 @@
 #     (a) Linear Regression
 #     (b) Lasso
 #     (c) Ridge
-#     (d) Random Forest
-#     (e) XGBoost
+#     (d) Elastic Net
+#     (e) Random Forest
+#     (f) XGBoost
 #   ...and compares out-of-sample MSE for each approach.
 # 6) Prints summary and chooses the best approach per fold.
 # 
@@ -168,6 +169,13 @@ fit_and_evaluate <- function(train_df, test_df){
   pred_ridge <- predict(cv_ridge, newx=x_test, s="lambda.min")
   mse_ridge  <- mean((y_test - pred_ridge)^2)
   out$mse_ridge <- mse_ridge
+
+  set.seed(101.5)
+  alpha_elastic <- 0.5
+  cv_elastic <- cv.glmnet(x_train, y_train, alpha=alpha_elastic, nfolds=5)
+  pred_elastic <- predict(cv_elastic, newx=x_test, s="lambda.min")
+  mse_elastic  <- mean((y_test - pred_elastic)^2)
+  out$mse_elastic <- mse_elastic
   
   set.seed(102)
   train_rf <- train_df %>% mutate(position = factor(position))
@@ -215,6 +223,7 @@ cv_results <- data.frame(
   mse_lm      = numeric(),
   mse_lasso   = numeric(),
   mse_ridge   = numeric(),
+  mse_elastic = numeric(),
   mse_rf      = numeric(),
   mse_xgb     = numeric(),
   best_model  = character(),
@@ -235,10 +244,10 @@ for(test_year in valid_seasons){
   
   out_list <- fit_and_evaluate(train_df, test_df)
   
-  model_names <- c("lm","lasso","ridge","rf","xgb")
+  model_names <- c("lm","lasso","ridge", "elastic", "rf","xgb")
   mse_values  <- c(
     out_list$mse_lm, out_list$mse_lasso, out_list$mse_ridge,
-    out_list$mse_rf, out_list$mse_xgb
+    out_list$mse_elastic, out_list$mse_rf, out_list$mse_xgb
   )
   best_idx <- which.min(mse_values)
   best_mod <- model_names[best_idx]
@@ -248,6 +257,7 @@ for(test_year in valid_seasons){
     mse_lm     = out_list$mse_lm,
     mse_lasso  = out_list$mse_lasso,
     mse_ridge  = out_list$mse_ridge,
+    mse_elastic= out_list$mse_elastic,
     mse_rf     = out_list$mse_rf,
     mse_xgb    = out_list$mse_xgb,
     best_model = best_mod,
@@ -264,6 +274,7 @@ avg_mse <- cv_results %>%
     lm=mean(mse_lm),
     lasso=mean(mse_lasso),
     ridge=mean(mse_ridge),
+    elastic=mean(mse_elastic),
     rf=mean(mse_rf),
     xgb=mean(mse_xgb)
   )
@@ -289,9 +300,10 @@ print(final_out)
 mse_values  <- c(final_out$mse_lm,
                  final_out$mse_lasso,
                  final_out$mse_ridge,
+                 final_out$mse_elastic,
                  final_out$mse_rf,
                  final_out$mse_xgb)
-model_names <- c("lm","lasso","ridge","rf","xgb")
+model_names <- c("lm","lasso","ridge", "elastic", "rf","xgb")
 best_idx <- which.min(mse_values)
 cat("\nBest model for 2021->2022 was:", model_names[best_idx],
     "with MSE=", round(mse_values[best_idx],2), "\n")
@@ -321,6 +333,9 @@ set.seed(100)
 cv_lasso_final <- cv.glmnet(x_train_final, y_train_final, alpha=1, nfolds=5)
 set.seed(101)
 cv_ridge_final <- cv.glmnet(x_train_final, y_train_final, alpha=0, nfolds=5)
+
+set.seed(101.5)
+cv_elastic_final <- cv.glmnet(x_train_final, y_train_final, alpha=0.5, nfolds=5)
 
 set.seed(102)
 rf_fit_final <- randomForest(
@@ -353,6 +368,7 @@ pred_df <- test_final %>%
     pred_lm     = predict(lm_fit_final, newdata=test_final),
     pred_lasso  = as.vector(predict(cv_lasso_final, newx=x_test_final, s="lambda.min")),
     pred_ridge  = as.vector(predict(cv_ridge_final, newx=x_test_final, s="lambda.min")),
+    pred_elastic= as.vector(predict(cv_elastic_final, newx=x_test_final, s="lambda.min")),
     pred_rf     = predict(rf_fit_final, newdata=test_final %>% mutate(position=factor(position))),
     pred_xgb    = predict(xgb_fit_final, newdata=xgb_dtest_final)
   )
@@ -364,12 +380,161 @@ pos_mse <- pred_df %>%
     MSE_lm     = mean((ppr_next_season - pred_lm)^2),
     MSE_lasso  = mean((ppr_next_season - pred_lasso)^2),
     MSE_ridge  = mean((ppr_next_season - pred_ridge)^2),
+    MSE_elastic = mean((ppr_next_season - pred_elastic)^2),
     MSE_rf     = mean((ppr_next_season - pred_rf)^2),
     MSE_xgb    = mean((ppr_next_season - pred_xgb)^2)
   )
 
 cat("\nPosition-Specific MSE for Final Test:\n")
 print(pos_mse)
+
+
+
+###########################
+# 4b) RANKING-BASED EVALUATION
+###########################
+cat("\n=== 4b) RANKING-BASED EVALUATION (Final Test) ===\n")
+
+ranking_df <- pred_df %>%
+  select(
+    player_id, 
+    player_display_name, 
+    position,
+    actual_ppr = ppr_next_season,
+    pred_elastic
+  ) %>%
+  mutate(
+    actual_rank = min_rank(desc(actual_ppr)),
+    pred_rank   = min_rank(desc(pred_elastic))
+  )
+
+### 4b.1) TOP 10 ###
+top10_pred_elastic <- ranking_df %>%
+  filter(pred_rank <= 10) %>%
+  arrange(pred_rank)
+
+cat("\n--- Top 10 Predicted (Elastic Net) ---\n")
+print(top10_pred_elastic[, c("pred_rank","player_display_name","position","actual_ppr")],
+      row.names=FALSE)
+
+cat("\n--- Top 10 Actual (Elastic Net) ---\n")
+top10_actual <- ranking_df %>%
+  filter(actual_rank <= 10) %>%
+  arrange(actual_rank)
+print(top10_actual[, c("actual_rank","player_display_name","position","actual_ppr")],
+      row.names=FALSE)
+
+### 4b.2) TOP 50 ###
+top50_pred_elastic <- ranking_df %>%
+  filter(pred_rank <= 50) %>%
+  arrange(pred_rank)
+
+cat("\n--- Top 50 Predicted (Elastic Net), first 10 shown ---\n")
+print(head(top50_pred_elastic[, c("pred_rank","player_display_name","position","actual_ppr")], 10),
+      row.names=FALSE)
+
+### 4b.3) TOP 100 ###
+top100_pred_elastic <- ranking_df %>%
+  filter(pred_rank <= 100) %>%
+  arrange(pred_rank)
+
+cat("\n--- Top 100 Predicted (Elastic Net), first 10 shown ---\n")
+print(head(top100_pred_elastic[, c("pred_rank","player_display_name","position","actual_ppr")], 10),
+      row.names=FALSE)
+
+### 4b.4) Spearman Rank Correlation + Overlap in Top 10
+spearman_elastic <- cor(ranking_df$actual_rank, ranking_df$pred_rank, method="spearman")
+cat("\nSpearman Rank Correlation (Elastic Net):", round(spearman_elastic, 3), "\n")
+
+common_ids <- intersect(top10_pred_elastic$player_id, top10_actual$player_id)
+cat("Number of overlapping players in top-10 (predicted vs. actual):",
+    length(common_ids), "\n")
+
+### 4b.5) "Highest Team Score" - Sum of Top 10 by Predicted (No Constraints)
+top_team_size <- 10
+top_team <- ranking_df %>%
+  arrange(pred_rank) %>%
+  head(top_team_size)
+
+team_score_actual <- sum(top_team$actual_ppr, na.rm=TRUE)
+
+cat("\nIf we draft the top", top_team_size, 
+    "players by predicted rank (ignoring positions), sum of their actual PPR is:",
+    round(team_score_actual, 1), "\n")
+
+### 4b.6) Highest Team Score with Standard Roster Constraints
+# e.g., 1 QB, 2 RB, 2 WR, 1 TE
+cat("\n--- Highest Team Score with Standard Roster Constraints ---\n")
+pos_needed <- c(QB=1, RB=2, WR=2, TE=1) 
+
+players_chosen <- list()
+for(p in names(pos_needed)){
+  n_needed <- pos_needed[p]
+  pos_df <- ranking_df %>%
+    filter(position == p) %>%
+    arrange(pred_rank) %>%
+    head(n_needed)
+  players_chosen[[p]] <- pos_df
+}
+
+team_df <- do.call(rbind, players_chosen)
+standard_score_actual <- sum(team_df$actual_ppr, na.rm=TRUE)
+
+cat("Drafting 1 QB, 2 RB, 2 WR, and 1 TE by predicted rank yields an actual PPR of:",
+    round(standard_score_actual, 1), "\n")
+cat("Here are those picks:\n")
+print(team_df %>% 
+  select(pred_rank, player_display_name, position, actual_ppr) %>%
+  arrange(pred_rank))
+
+### 4b.7) Compare Predicted-Based Team to Best Actual Team
+cat("\n--- Comparison to Best Actual Team ---\n")
+
+model_team_score <- sum(team_df$actual_ppr, na.rm=TRUE)
+
+pos_needed <- c(QB=1, RB=2, WR=2, TE=1)
+players_best_actual <- list()
+
+for(p in names(pos_needed)) {
+  n_needed <- pos_needed[p]
+  best_df <- ranking_df %>%
+    filter(position == p) %>%
+    arrange(desc(actual_ppr)) %>%
+    head(n_needed)
+  players_best_actual[[p]] <- best_df
+}
+
+best_actual_team_df <- do.call(rbind, players_best_actual)
+best_actual_score <- sum(best_actual_team_df$actual_ppr, na.rm=TRUE)
+
+cat("Model-based team score =", round(model_team_score, 1), "\n")
+cat("Optimal-by-actual team score =", round(best_actual_score, 1), "\n")
+
+cat("\n--- Optimal Team by Actual PPR (same constraints) ---\n")
+print(best_actual_team_df %>%
+  select(player_display_name, position, actual_ppr) %>%
+  arrange(desc(actual_ppr)))
+
+### 4b.8) Average Rank Difference Across All Players
+cat("\n--- Additional 'How Far Off?' Metrics ---\n")
+ranking_df <- ranking_df %>%
+  mutate(rank_diff = abs(actual_rank - pred_rank))
+
+mean_rank_diff <- mean(ranking_df$rank_diff)
+cat("Mean absolute difference in rank =", round(mean_rank_diff, 2), "\n")
+
+median_rank_diff <- median(ranking_df$rank_diff)
+cat("Median absolute difference in rank =", round(median_rank_diff, 2), "\n")
+
+### 4b.9) Points Left on the Table for Top-10
+top10_predicted_points <- sum(top10_pred_elastic$actual_ppr, na.rm=TRUE)
+top10_actual_points    <- sum(top10_actual$actual_ppr, na.rm=TRUE)
+
+cat("\nPoints for top-10 predicted:", round(top10_predicted_points, 1), "\n")
+cat("Points for top-10 actual:   ", round(top10_actual_points, 1), "\n")
+cat("Difference:                ", 
+    round(top10_actual_points - top10_predicted_points, 1), "\n")
+
 
 
 ###########################

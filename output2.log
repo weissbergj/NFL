@@ -1,38 +1,5 @@
 Rscript prediction2.R
 
-Attaching package: ‘dplyr’
-
-The following objects are masked from ‘package:stats’:
-
-    filter, lag
-
-The following objects are masked from ‘package:base’:
-
-    intersect, setdiff, setequal, union
-
-Loading required package: Matrix
-Loaded glmnet 4.1-8
-randomForest 4.7-1.2
-Type rfNews() to see new features/changes/bug fixes.
-
-Attaching package: ‘randomForest’
-
-The following object is masked from ‘package:ggplot2’:
-
-    margin
-
-The following object is masked from ‘package:dplyr’:
-
-    combine
-
-
-Attaching package: ‘xgboost’
-
-The following object is masked from ‘package:dplyr’:
-
-    slice
-
-
 === 1) LOADING MULTI-YEAR NFL DATA (2010-2022) ===
 
 === Aggregating Each Player's Season Stats ===
@@ -71,35 +38,48 @@ Head of 'df_predict' dataset:
   -> FOLD w/ test_year = 2021  (Train size = 4300 , Test size = 439 )
 
 === CROSS-VALIDATION RESULTS (by test_year) ===
-   test_year   mse_lm mse_lasso mse_ridge   mse_rf  mse_xgb best_model
-1       2011 5477.688  4775.333  4621.492 4849.670 6013.002      ridge
-2       2012 4896.455  4815.120  4772.553 5438.072 5848.573      ridge
-3       2013 4883.479  4852.611  4887.396 5280.586 5924.960      lasso
-4       2014 5395.839  5336.557  5339.787 5675.305 6075.876      lasso
-5       2015 4525.037  4618.964  4546.835 4992.132 5323.099         lm
-6       2016 3929.062  3853.225  3820.210 4014.152 4322.570      ridge
-7       2017 5090.278  5121.912  5148.145 5694.925 5588.809         lm
-8       2018 4843.069  4796.179  4859.834 4888.631 5209.684      lasso
-9       2019 4877.326  4883.454  4888.945 5107.496 5362.322         lm
-10      2020 4511.129  4576.372  4562.353 4764.980 4907.972         lm
-11      2021 4051.395  4049.582  4050.882 4211.980 4471.895      lasso
+   test_year   mse_lm mse_lasso mse_ridge mse_elastic   mse_rf  mse_xgb
+1       2011 5477.688  4775.333  4621.492    4682.961 4849.670 6013.002
+2       2012 4896.455  4815.120  4772.553    4793.697 5438.072 5848.573
+3       2013 4883.479  4852.611  4887.396    4851.032 5280.586 5924.960
+4       2014 5395.839  5336.557  5339.787    5331.545 5675.305 6075.876
+5       2015 4525.037  4618.964  4546.835    4614.451 4992.132 5323.099
+6       2016 3929.062  3853.225  3820.210    3841.215 4014.152 4322.570
+7       2017 5090.278  5121.912  5148.145    5131.529 5694.925 5588.809
+8       2018 4843.069  4796.179  4859.834    4792.570 4888.631 5209.684
+9       2019 4877.326  4883.454  4888.945    4887.120 5107.496 5362.322
+10      2020 4511.129  4576.372  4562.353    4546.415 4764.980 4907.972
+11      2021 4051.395  4049.582  4050.882    4049.455 4211.980 4471.895
+   best_model
+1       ridge
+2       ridge
+3     elastic
+4     elastic
+5          lm
+6       ridge
+7          lm
+8     elastic
+9          lm
+10         lm
+11    elastic
 
 === AVERAGE MSE ACROSS ALL FOLDS ===
-        lm    lasso    ridge       rf      xgb
-1 4770.978 4698.119 4681.676 4992.539 5368.069
+        lm    lasso    ridge  elastic       rf      xgb
+1 4770.978 4698.119 4681.676 4683.817 4992.539 5368.069
 
 Which model is best on average?
-          [,1]
-lm    4770.978
-lasso 4698.119
-ridge 4681.676
-rf    4992.539
-xgb   5368.069
+            [,1]
+lm      4770.978
+lasso   4698.119
+ridge   4681.676
+elastic 4683.817
+rf      4992.539
+xgb     5368.069
 
 Best Model Counts (lowest MSE per fold):
 
-lasso    lm ridge 
-    4     4     3 
+elastic      lm   ridge 
+      4       4       3 
 
 === 4) FINAL TRAIN on [2010..2020], TEST on 2021 => Next Season (2022) ===
 $mse_lm
@@ -111,6 +91,9 @@ $mse_lasso
 $mse_ridge
 [1] 4050.882
 
+$mse_elastic
+[1] 4049.455
+
 $mse_rf
 [1] 4211.98
 
@@ -118,38 +101,153 @@ $mse_xgb
 [1] 4471.895
 
 
-Best model for 2021->2022 was: lasso with MSE= 4049.58 
+Best model for 2021->2022 was: elastic with MSE= 4049.46 
 
 === 4a) MSE BY POSITION (Final Test) ===
 
 Position-Specific MSE for Final Test:
-# A tibble: 4 × 6
-  position MSE_lm MSE_lasso MSE_ridge MSE_rf MSE_xgb
-  <chr>     <dbl>     <dbl>     <dbl>  <dbl>   <dbl>
-1 QB        6543.     6599.     6552.  7212.   8786.
-2 RB        5340.     5304.     5332.  5373.   5392.
-3 TE        1644.     1652.     1612.  1750.   1747.
-4 WR        3498.     3491.     3516.  3568.   3599.
+# A tibble: 4 × 7
+  position MSE_lm MSE_lasso MSE_ridge MSE_elastic MSE_rf MSE_xgb
+  <chr>     <dbl>     <dbl>     <dbl>       <dbl>  <dbl>   <dbl>
+1 QB        6543.     6599.     6552.       6561.  7212.   8786.
+2 RB        5340.     5304.     5332.       5326.  5373.   5392.
+3 TE        1644.     1652.     1612.       1645.  1750.   1747.
+4 WR        3498.     3491.     3516.       3495.  3568.   3599.
+
+=== 4b) RANKING-BASED EVALUATION (Final Test) ===
+
+--- Top 10 Predicted (Elastic Net) ---
+# A tibble: 10 × 4
+   pred_rank player_display_name position actual_ppr
+       <int> <chr>               <chr>         <dbl>
+ 1         1 Cooper Kupp         WR             201.
+ 2         2 Josh Allen          QB             435.
+ 3         3 Patrick Mahomes     QB             478.
+ 4         4 Tom Brady           QB             294.
+ 5         5 Matthew Stafford    QB             108.
+ 6         6 Joe Burrow          QB             407.
+ 7         7 Justin Herbert      QB             297.
+ 8         8 Deebo Samuel        WR             210.
+ 9         9 Aaron Rodgers       QB             239.
+10        10 Ja'Marr Chase       WR             297.
+
+--- Top 10 Actual (Elastic Net) ---
+# A tibble: 10 × 4
+   actual_rank player_display_name position actual_ppr
+         <int> <chr>               <chr>         <dbl>
+ 1           1 Patrick Mahomes     QB             478.
+ 2           2 Jalen Hurts         QB             458.
+ 3           3 Josh Allen          QB             435.
+ 4           4 Christian McCaffrey RB             416.
+ 5           5 Joe Burrow          QB             407.
+ 6           6 Travis Kelce        TE             393 
+ 7           7 Austin Ekeler       RB             391 
+ 8           8 Justin Jefferson    WR             380.
+ 9           9 Tyreek Hill         WR             358.
+10          10 Stefon Diggs        WR             342.
+
+--- Top 50 Predicted (Elastic Net), first 10 shown ---
+# A tibble: 10 × 4
+   pred_rank player_display_name position actual_ppr
+       <int> <chr>               <chr>         <dbl>
+ 1         1 Cooper Kupp         WR             201.
+ 2         2 Josh Allen          QB             435.
+ 3         3 Patrick Mahomes     QB             478.
+ 4         4 Tom Brady           QB             294.
+ 5         5 Matthew Stafford    QB             108.
+ 6         6 Joe Burrow          QB             407.
+ 7         7 Justin Herbert      QB             297.
+ 8         8 Deebo Samuel        WR             210.
+ 9         9 Aaron Rodgers       QB             239.
+10        10 Ja'Marr Chase       WR             297.
+
+--- Top 100 Predicted (Elastic Net), first 10 shown ---
+# A tibble: 10 × 4
+   pred_rank player_display_name position actual_ppr
+       <int> <chr>               <chr>         <dbl>
+ 1         1 Cooper Kupp         WR             201.
+ 2         2 Josh Allen          QB             435.
+ 3         3 Patrick Mahomes     QB             478.
+ 4         4 Tom Brady           QB             294.
+ 5         5 Matthew Stafford    QB             108.
+ 6         6 Joe Burrow          QB             407.
+ 7         7 Justin Herbert      QB             297.
+ 8         8 Deebo Samuel        WR             210.
+ 9         9 Aaron Rodgers       QB             239.
+10        10 Ja'Marr Chase       WR             297.
+
+Spearman Rank Correlation (Elastic Net): 0.743 
+Number of overlapping players in top-10 (predicted vs. actual): 3 
+
+If we draft the top 10 players by predicted rank (ignoring positions), sum of their actual PPR is: 2965.
+5                                                                                                       
+--- Highest Team Score with Standard Roster Constraints ---
+Drafting 1 QB, 2 RB, 2 WR, and 1 TE by predicted rank yields an actual PPR of: 1660.3 
+Here are those picks:
+# A tibble: 6 × 4
+  pred_rank player_display_name position actual_ppr
+      <int> <chr>               <chr>         <dbl>
+1         1 Cooper Kupp         WR             201.
+2         2 Josh Allen          QB             435.
+3         8 Deebo Samuel        WR             210.
+4        14 Jonathan Taylor     RB             146.
+5        18 Travis Kelce        TE             393 
+6        21 Joe Mixon           RB             275.
+
+--- Comparison to Best Actual Team ---
+Model-based team score = 1660.3 
+Optimal-by-actual team score = 2415.7 
+
+--- Optimal Team by Actual PPR (same constraints) ---
+# A tibble: 6 × 3
+  player_display_name position actual_ppr
+  <chr>               <chr>         <dbl>
+1 Patrick Mahomes     QB             478.
+2 Christian McCaffrey RB             416.
+3 Travis Kelce        TE             393 
+4 Austin Ekeler       RB             391 
+5 Justin Jefferson    WR             380.
+6 Tyreek Hill         WR             358.
+
+--- Additional 'How Far Off?' Metrics ---
+Mean absolute difference in rank = 68.07 
+Median absolute difference in rank = 49 
+
+Points for top-10 predicted: 2965.5 
+Points for top-10 actual:    4057 
+Difference:                 1091.5 
 
 
 === COMPLETE SUMMARY OF RESULTS ===
 Year-based CV results:
-   test_year   mse_lm mse_lasso mse_ridge   mse_rf  mse_xgb best_model
-1       2011 5477.688  4775.333  4621.492 4849.670 6013.002      ridge
-2       2012 4896.455  4815.120  4772.553 5438.072 5848.573      ridge
-3       2013 4883.479  4852.611  4887.396 5280.586 5924.960      lasso
-4       2014 5395.839  5336.557  5339.787 5675.305 6075.876      lasso
-5       2015 4525.037  4618.964  4546.835 4992.132 5323.099         lm
-6       2016 3929.062  3853.225  3820.210 4014.152 4322.570      ridge
-7       2017 5090.278  5121.912  5148.145 5694.925 5588.809         lm
-8       2018 4843.069  4796.179  4859.834 4888.631 5209.684      lasso
-9       2019 4877.326  4883.454  4888.945 5107.496 5362.322         lm
-10      2020 4511.129  4576.372  4562.353 4764.980 4907.972         lm
-11      2021 4051.395  4049.582  4050.882 4211.980 4471.895      lasso
+   test_year   mse_lm mse_lasso mse_ridge mse_elastic   mse_rf  mse_xgb
+1       2011 5477.688  4775.333  4621.492    4682.961 4849.670 6013.002
+2       2012 4896.455  4815.120  4772.553    4793.697 5438.072 5848.573
+3       2013 4883.479  4852.611  4887.396    4851.032 5280.586 5924.960
+4       2014 5395.839  5336.557  5339.787    5331.545 5675.305 6075.876
+5       2015 4525.037  4618.964  4546.835    4614.451 4992.132 5323.099
+6       2016 3929.062  3853.225  3820.210    3841.215 4014.152 4322.570
+7       2017 5090.278  5121.912  5148.145    5131.529 5694.925 5588.809
+8       2018 4843.069  4796.179  4859.834    4792.570 4888.631 5209.684
+9       2019 4877.326  4883.454  4888.945    4887.120 5107.496 5362.322
+10      2020 4511.129  4576.372  4562.353    4546.415 4764.980 4907.972
+11      2021 4051.395  4049.582  4050.882    4049.455 4211.980 4471.895
+   best_model
+1       ridge
+2       ridge
+3     elastic
+4     elastic
+5          lm
+6       ridge
+7          lm
+8     elastic
+9          lm
+10         lm
+11    elastic
 
 Average MSE by model:
-        lm    lasso    ridge       rf      xgb
-1 4770.978 4698.119 4681.676 4992.539 5368.069
+        lm    lasso    ridge  elastic       rf      xgb
+1 4770.978 4698.119 4681.676 4683.817 4992.539 5368.069
 
 Single final test on 2021->2022:
 $mse_lm
@@ -161,6 +259,9 @@ $mse_lasso
 $mse_ridge
 [1] 4050.882
 
+$mse_elastic
+[1] 4049.455
+
 $mse_rf
 [1] 4211.98
 
@@ -168,7 +269,7 @@ $mse_xgb
 [1] 4471.895
 
 
-Best final model was: lasso 
+Best final model was: elastic 
 
 === 6) FEATURE IMPORTANCE (LASSO) ===
 
