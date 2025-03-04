@@ -88,5 +88,3 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 | receptions          |   0.4428340   |  0.4428340           |
 | catch_efficiency    |   0.4063188   |  0.4063188           |
 | carries             |  -0.1842852   |  0.1842852           |
-
----
