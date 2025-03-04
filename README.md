@@ -2,7 +2,7 @@
 
 **Authors:** Austin Bennett and Jared Weissberg
 
-This repository contains R scripts for a final project exploring offensive player data in the NFL. Below is a brief description of each file (all located in the [same directory](https://github.com/weissbergj/NFL)):
+In this repository, we analyze offensive player data in the NFL in R. Below is a brief description of each file:
 
 - [**summary_stats.R**](https://github.com/weissbergj/NFL/blob/main/summary_stats.R)  
   Provides initial data visualizations and summary statistics for 2022 weekly data.
