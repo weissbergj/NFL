@@ -54,6 +54,8 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 > \* **Mean RMSE (CV)** is the root mean squared error averaged over 11 year-based folds (2011–2021).  
 > † **Final Test RMSE** is from training on 2010–2020 and testing on the 2021 data (predicting 2022 PPR).
 
+---
+
 ## 3) RMSE by Position (Second Predictive Approach on Final test Set (2021 → 2022))
 
 | Position | Linear | Lasso | Ridge | RandomForest | XGBoost |
@@ -64,6 +66,8 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 | **WR**   | 59.13  | 59.00 | 59.26 | 59.75       | 59.99   |
 
 > The table shows how each model’s predictive accuracy varies by position. For instance, while Lasso narrowly edges out other methods for running backs, Ridge achieves the lowest RMSE for tight ends.
+
+---
 
 ## 4) Top LASSO Coefficients by Absolute Value
 
