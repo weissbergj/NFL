@@ -297,6 +297,82 @@ cat("\nBest model for 2021->2022 was:", model_names[best_idx],
     "with MSE=", round(mse_values[best_idx],2), "\n")
 
 ###########################
+# 4a) MSE by Position (Final Test)
+###########################
+cat("\n=== 4a) MSE BY POSITION (Final Test) ===\n")
+
+# re-run final model fits:
+lm_fit_final <- lm(
+  ppr_next_season ~ passing_yards + passing_tds + interceptions +
+    carries + rushing_yards + rushing_tds +
+    receptions + receiving_yards + receiving_tds + position +
+    completions + pass_attempts + fumbles_total +
+    passing_efficiency + completion_rate +
+    catch_efficiency + rushing_efficiency + over_10rush_game,
+  data=train_final
+)
+
+x_train_final <- make_model_matrix(train_final)
+y_train_final <- train_final$ppr_next_season
+x_test_final  <- make_model_matrix(test_final)
+y_test_final  <- test_final$ppr_next_season
+
+set.seed(100)
+cv_lasso_final <- cv.glmnet(x_train_final, y_train_final, alpha=1, nfolds=5)
+set.seed(101)
+cv_ridge_final <- cv.glmnet(x_train_final, y_train_final, alpha=0, nfolds=5)
+
+set.seed(102)
+rf_fit_final <- randomForest(
+  ppr_next_season ~ passing_yards + passing_tds + interceptions +
+    carries + rushing_yards + rushing_tds +
+    receptions + receiving_yards + receiving_tds + position +
+    completions + pass_attempts + fumbles_total +
+    passing_efficiency + completion_rate +
+    catch_efficiency + rushing_efficiency + over_10rush_game,
+  data=train_final %>% mutate(position=factor(position)),
+  ntree=500,
+  mtry=6
+)
+
+set.seed(103)
+xgb_dtrain_final <- xgb.DMatrix(data=x_train_final, label=y_train_final)
+xgb_dtest_final  <- xgb.DMatrix(data=x_test_final,  label=y_test_final)
+params_final <- list(objective="reg:squarederror", eta=0.08, max_depth=5)
+xgb_fit_final <- xgb.train(
+  params=params_final,
+  data=xgb_dtrain_final,
+  nrounds=300,
+  watchlist=list(train=xgb_dtrain_final),
+  verbose=0
+)
+
+# generate predictions for each row in test_final:
+pred_df <- test_final %>%
+  mutate(
+    pred_lm     = predict(lm_fit_final, newdata=test_final),
+    pred_lasso  = as.vector(predict(cv_lasso_final, newx=x_test_final, s="lambda.min")),
+    pred_ridge  = as.vector(predict(cv_ridge_final, newx=x_test_final, s="lambda.min")),
+    pred_rf     = predict(rf_fit_final, newdata=test_final %>% mutate(position=factor(position))),
+    pred_xgb    = predict(xgb_fit_final, newdata=xgb_dtest_final)
+  )
+
+# compute MSE by position for each model:
+pos_mse <- pred_df %>%
+  group_by(position) %>%
+  summarise(
+    MSE_lm     = mean((ppr_next_season - pred_lm)^2),
+    MSE_lasso  = mean((ppr_next_season - pred_lasso)^2),
+    MSE_ridge  = mean((ppr_next_season - pred_ridge)^2),
+    MSE_rf     = mean((ppr_next_season - pred_rf)^2),
+    MSE_xgb    = mean((ppr_next_season - pred_xgb)^2)
+  )
+
+cat("\nPosition-Specific MSE for Final Test:\n")
+print(pos_mse)
+
+
+###########################
 # 5) Summaries
 ###########################
 cat("\n\n=== COMPLETE SUMMARY OF RESULTS ===\n")
