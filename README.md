@@ -27,5 +27,3 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 
 - [**Rplots.pdf**](https://github.com/weissbergj/NFL/blob/main/Rplots.pdf)  
   Displays initial data visualizations, which are not highly informative.
-
-**Authors:** Austin Bennett and Jared Weissberg
