@@ -17,7 +17,7 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
   A first attempt at predictive modeling using linear regression, LASSO, Ridge, random forest, and XGBoost. Results are logged in **output.log**.
 
 - [**prediction2.R**](https://github.com/weissbergj/NFL/blob/main/prediction2.R)  
-  Extends the predictive approach with additional features and computes feature importance. Results are logged in **output2.log**.
+  Extends the predictive approach with additional features and computes feature importance. It also builds and evaluates a team roster. Results are logged in **output2.log**.
 
 - [**output.log**](https://github.com/weissbergj/NFL/blob/main/output.log)  
   Contains the console output from running **prediction.R**.
@@ -45,8 +45,9 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 | Model         | Mean RMSE (CV)* | Final Test RMSE† |
 |---------------|-----------------|-------------------|
 | Linear        | 69.09           | 63.64            |
-| **Lasso**     | 68.55           | **63.63**        |
-| **Ridge**     | **68.41**       | 63.64            |
+| Lasso         | 68.55           | **63.63**        |
+| Ridge         | **68.41**       | 63.64            |
+| Elastic Net   | 68.42           | **63.63**        |
 | RandomForest  | 70.63           | 64.89            |
 | XGBoost       | 73.29           | 66.87            |
 
@@ -56,16 +57,16 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 
 ---
 
-## 3) RMSE by Position (Second Predictive Approach on Final test Set (2021 → 2022))
+## 3) RMSE by Position (Second Predictive Approach on Final Test Set (2021 → 2022))
 
-| Position | Linear | Lasso | Ridge | RandomForest | XGBoost |
-|----------|-------:|------:|------:|------------:|--------:|
-| **QB**   | 80.93  | 81.23 | 80.95 | 84.96       | 93.72   |
-| **RB**   | 73.09  | 72.83 | 73.01 | 73.31       | 73.43   |
-| **TE**   | 40.59  | 40.64 | 40.18 | 41.83       | 41.80   |
-| **WR**   | 59.13  | 59.00 | 59.26 | 59.75       | 59.99   |
+| Position | Linear | Lasso | Ridge | Elastic Net | RandomForest | XGBoost |
+|----------|-------:|------:|------:|-----------:|------------:|--------:|
+| **QB**   | 80.93  | 81.23 | 80.95 | 81.00       | 84.96        | 93.72   |
+| **RB**   | 73.09  | 72.83 | 73.01 | 72.97       | 73.31        | 73.43   |
+| **TE**   | 40.59  | 40.64 | 40.18 | 40.62       | 41.83        | 41.80   |
+| **WR**   | 59.13  | 59.00 | 59.26 | 59.07       | 59.75        | 59.99   |
 
-> The table shows how each model’s predictive accuracy varies by position. For instance, while Lasso narrowly edges out other methods for running backs, Ridge achieves the lowest RMSE for tight ends.
+> The table shows how each model’s predictive accuracy varies by position.
 
 ---
 
