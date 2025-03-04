@@ -120,6 +120,17 @@ $mse_xgb
 
 Best model for 2021->2022 was: lasso with MSE= 4049.58 
 
+=== 4a) MSE BY POSITION (Final Test) ===
+
+Position-Specific MSE for Final Test:
+# A tibble: 4 × 6
+  position MSE_lm MSE_lasso MSE_ridge MSE_rf MSE_xgb
+  <chr>     <dbl>     <dbl>     <dbl>  <dbl>   <dbl>
+1 QB        6543.     6599.     6552.  7212.   8786.
+2 RB        5340.     5304.     5332.  5373.   5392.
+3 TE        1644.     1652.     1612.  1750.   1747.
+4 WR        3498.     3491.     3516.  3568.   3599.
+
 
 === COMPLETE SUMMARY OF RESULTS ===
 Year-based CV results:
