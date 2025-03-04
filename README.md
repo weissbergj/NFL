@@ -53,3 +53,23 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 > **Notes**  
 > \* **Mean MSE (CV)** is the average mean squared error over 11 cross-validation folds (2011–2021).  
 > † **Final Test MSE** is from training on 2010–2020 and testing on the 2021 season (predicting 2022 PPR).
+
+## 3) Top LASSO Coefficients by Absolute Value
+
+| Feature             | Coefficient   | Absolute Coefficient |
+|---------------------|--------------:|----------------------:|
+| completion_rate     | -17.8979890   | 17.8979890           |
+| positionTE          | -10.8775789   | 10.8775789           |
+| positionWR          |  -5.7420639   |  5.7420639           |
+| over_10rush_game    |  -5.6925762   |  5.6925762           |
+| interceptions       |  -2.9962910   |  2.9962910           |
+| rushing_tds         |   2.7746831   |  2.7746831           |
+| passing_tds         |   2.3370283   |  2.3370283           |
+| receiving_tds       |   2.3233078   |  2.3233078           |
+| positionRB          |  -1.2258538   |  1.2258538           |
+| passing_efficiency  |   1.0386309   |  1.0386309           |
+| rushing_efficiency  |   0.9226316   |  0.9226316           |
+| fumbles_total       |  -0.5355879   |  0.5355879           |
+| receptions          |   0.4428340   |  0.4428340           |
+| catch_efficiency    |   0.4063188   |  0.4063188           |
+| carries             |  -0.1842852   |  0.1842852           |
