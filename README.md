@@ -6,7 +6,7 @@ In this repository, we analyze offensive player data in the NFL in R. Final resu
 
 ## Table 1. Final 2021 (Effecitvely 2022 Predictions) Holdout Results by Position
 
-| Pos | Best Model | MSE (2021) | RMSE (2021)† |
+| Pos | Best Model | MSE (2021)* | RMSE (2021)† |
 |:-------:|:-------------:|---------------:|----------------:|
 | QB | Ridge         | 6308.36        | 79.45           |
 | RB  | Ridge         | 5387.21        | 73.41           |
