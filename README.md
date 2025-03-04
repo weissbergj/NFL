@@ -28,31 +28,31 @@ In this repository, we analyze offensive player data in the NFL in R. Below is a
 - [**Rplots.pdf**](https://github.com/weissbergj/NFL/blob/main/Rplots.pdf)  
   Displays initial data visualizations, which are not highly informative.
 
-## 1) Results from `output.log` (First Predictive Approach)
+## 1) Results from `output.log` (First Predictive Approach, **RMSE**)
 
-| Model         | Mean MSE (CV)* | Final Test MSE†   |
-|---------------|----------------|--------------------|
-| Linear        | 4698.505       | **4018.003**       |
-| Lasso         | 4702.563       | 4021.675           |
-| **Ridge**     | **4680.180**   | 4066.800           |
-| RandomForest  | 4987.957       | 4241.713           |
-| XGBoost       | 5575.036       | 4811.544           |
+| Model         | Mean RMSE (CV)* | Final Test RMSE† |
+|---------------|-----------------|-------------------|
+| Linear        | 68.57           | **63.42**        |
+| Lasso         | 68.59           | 63.44            |
+| **Ridge**     | **68.38**       | 63.77            |
+| RandomForest  | 70.61           | 65.16            |
+| XGBoost       | 74.66           | 69.38            |
 
 ---
 
-## 2) Results from `output2.log` (Second Predictive Approach)
+## 2) Results from `output2.log` (Second Predictive Approach, **RMSE**)
 
-| Model         | Mean MSE (CV)* | Final Test MSE†   |
-|---------------|----------------|--------------------|
-| Linear        | 4770.978       | 4051.395           |
-| **Lasso**     | 4698.119       | **4049.582**       |
-| **Ridge**     | **4681.676**   | 4050.882           |
-| RandomForest  | 4992.539       | 4211.980           |
-| XGBoost       | 5368.069       | 4471.895           |
+| Model         | Mean RMSE (CV)* | Final Test RMSE† |
+|---------------|-----------------|-------------------|
+| Linear        | 69.09           | 63.64            |
+| **Lasso**     | 68.55           | **63.63**        |
+| **Ridge**     | **68.41**       | 63.64            |
+| RandomForest  | 70.63           | 64.89            |
+| XGBoost       | 73.29           | 66.87            |
 
 > **Notes**  
-> \* **Mean MSE (CV)** is the average mean squared error over 11 cross-validation folds (2011–2021).  
-> † **Final Test MSE** is from training on 2010–2020 and testing on the 2021 season (predicting 2022 PPR).
+> \* **Mean RMSE (CV)** is the root mean squared error averaged over 11 year-based folds (2011–2021).  
+> † **Final Test RMSE** is from training on 2010–2020 and testing on the 2021 data (predicting 2022 PPR).
 
 ## 3) Top LASSO Coefficients by Absolute Value
 
