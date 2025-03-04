@@ -1,0 +1,205 @@
+Rscript prediction2.R
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+Loading required package: Matrix
+Loaded glmnet 4.1-8
+randomForest 4.7-1.2
+Type rfNews() to see new features/changes/bug fixes.
+
+Attaching package: ‘randomForest’
+
+The following object is masked from ‘package:ggplot2’:
+
+    margin
+
+The following object is masked from ‘package:dplyr’:
+
+    combine
+
+
+Attaching package: ‘xgboost’
+
+The following object is masked from ‘package:dplyr’:
+
+    slice
+
+
+=== 1) LOADING MULTI-YEAR NFL DATA (2010-2022) ===
+
+=== Aggregating Each Player's Season Stats ===
+
+=== Creating Next-Season PPR Column (Predictive) ===
+
+Head of 'df_predict' dataset:
+# A tibble: 6 × 19
+  player_id  player_display_name position season passing_yards passing_tds
+  <chr>      <chr>               <chr>     <int>         <dbl>       <int>
+1 00-0000865 Charlie Batch       QB         2010           352           3
+2 00-0000865 Charlie Batch       QB         2011           208           0
+3 00-0002110 Mark Brunell        QB         2010           117           2
+4 00-0003292 Kerry Collins       QB         2010          1823          14
+5 00-0004161 Jake Delhomme       QB         2010           872           2
+6 00-0004541 Donald Driver       WR         2010             0           0
+# ℹ 13 more variables: interceptions <dbl>, carries <int>, rushing_yards <dbl>,
+#   rushing_tds <int>, receptions <int>, receiving_yards <dbl>,
+#   receiving_tds <int>, ppr_this_season <dbl>, completions <int>,
+#   pass_attempts <int>, fumbles_total <dbl>, next_season <dbl>,
+#   ppr_next_season <dbl>
+
+=== 2) DEFINING CROSS-VALIDATION OVER YEARS ===
+
+=== 3) RUNNING YEAR-BASED CROSS-VALIDATION SPLITS ===
+  -> FOLD w/ test_year = 2011  (Train size = 382 , Test size = 375 )
+  -> FOLD w/ test_year = 2012  (Train size = 757 , Test size = 380 )
+  -> FOLD w/ test_year = 2013  (Train size = 1137 , Test size = 370 )
+  -> FOLD w/ test_year = 2014  (Train size = 1507 , Test size = 389 )
+  -> FOLD w/ test_year = 2015  (Train size = 1896 , Test size = 385 )
+  -> FOLD w/ test_year = 2016  (Train size = 2281 , Test size = 393 )
+  -> FOLD w/ test_year = 2017  (Train size = 2674 , Test size = 379 )
+  -> FOLD w/ test_year = 2018  (Train size = 3053 , Test size = 385 )
+  -> FOLD w/ test_year = 2019  (Train size = 3438 , Test size = 420 )
+  -> FOLD w/ test_year = 2020  (Train size = 3858 , Test size = 442 )
+  -> FOLD w/ test_year = 2021  (Train size = 4300 , Test size = 439 )
+
+=== CROSS-VALIDATION RESULTS (by test_year) ===
+   test_year   mse_lm mse_lasso mse_ridge   mse_rf  mse_xgb best_model
+1       2011 5477.688  4775.333  4621.492 4849.670 6013.002      ridge
+2       2012 4896.455  4815.120  4772.553 5438.072 5848.573      ridge
+3       2013 4883.479  4852.611  4887.396 5280.586 5924.960      lasso
+4       2014 5395.839  5336.557  5339.787 5675.305 6075.876      lasso
+5       2015 4525.037  4618.964  4546.835 4992.132 5323.099         lm
+6       2016 3929.062  3853.225  3820.210 4014.152 4322.570      ridge
+7       2017 5090.278  5121.912  5148.145 5694.925 5588.809         lm
+8       2018 4843.069  4796.179  4859.834 4888.631 5209.684      lasso
+9       2019 4877.326  4883.454  4888.945 5107.496 5362.322         lm
+10      2020 4511.129  4576.372  4562.353 4764.980 4907.972         lm
+11      2021 4051.395  4049.582  4050.882 4211.980 4471.895      lasso
+
+=== AVERAGE MSE ACROSS ALL FOLDS ===
+        lm    lasso    ridge       rf      xgb
+1 4770.978 4698.119 4681.676 4992.539 5368.069
+
+Which model is best on average?
+          [,1]
+lm    4770.978
+lasso 4698.119
+ridge 4681.676
+rf    4992.539
+xgb   5368.069
+
+Best Model Counts (lowest MSE per fold):
+
+lasso    lm ridge 
+    4     4     3 
+
+=== 4) FINAL TRAIN on [2010..2020], TEST on 2021 => Next Season (2022) ===
+$mse_lm
+[1] 4051.395
+
+$mse_lasso
+[1] 4049.582
+
+$mse_ridge
+[1] 4050.882
+
+$mse_rf
+[1] 4211.98
+
+$mse_xgb
+[1] 4471.895
+
+
+Best model for 2021->2022 was: lasso with MSE= 4049.58 
+
+
+=== COMPLETE SUMMARY OF RESULTS ===
+Year-based CV results:
+   test_year   mse_lm mse_lasso mse_ridge   mse_rf  mse_xgb best_model
+1       2011 5477.688  4775.333  4621.492 4849.670 6013.002      ridge
+2       2012 4896.455  4815.120  4772.553 5438.072 5848.573      ridge
+3       2013 4883.479  4852.611  4887.396 5280.586 5924.960      lasso
+4       2014 5395.839  5336.557  5339.787 5675.305 6075.876      lasso
+5       2015 4525.037  4618.964  4546.835 4992.132 5323.099         lm
+6       2016 3929.062  3853.225  3820.210 4014.152 4322.570      ridge
+7       2017 5090.278  5121.912  5148.145 5694.925 5588.809         lm
+8       2018 4843.069  4796.179  4859.834 4888.631 5209.684      lasso
+9       2019 4877.326  4883.454  4888.945 5107.496 5362.322         lm
+10      2020 4511.129  4576.372  4562.353 4764.980 4907.972         lm
+11      2021 4051.395  4049.582  4050.882 4211.980 4471.895      lasso
+
+Average MSE by model:
+        lm    lasso    ridge       rf      xgb
+1 4770.978 4698.119 4681.676 4992.539 5368.069
+
+Single final test on 2021->2022:
+$mse_lm
+[1] 4051.395
+
+$mse_lasso
+[1] 4049.582
+
+$mse_ridge
+[1] 4050.882
+
+$mse_rf
+[1] 4211.98
+
+$mse_xgb
+[1] 4471.895
+
+
+Best final model was: lasso 
+
+=== 6) FEATURE IMPORTANCE (LASSO) ===
+
+Top LASSO Coefficients by Absolute Value:
+              feature        coef   abs_coef
+18    completion_rate -17.8979890 17.8979890
+12         positionTE -10.8775789 10.8775789
+13         positionWR  -5.7420639  5.7420639
+21   over_10rush_game  -5.6925762  5.6925762
+4       interceptions  -2.9962910  2.9962910
+7         rushing_tds   2.7746831  2.7746831
+3         passing_tds   2.3370283  2.3370283
+10      receiving_tds   2.3233078  2.3233078
+11         positionRB  -1.2258538  1.2258538
+17 passing_efficiency   1.0386309  1.0386309
+20 rushing_efficiency   0.9226316  0.9226316
+16      fumbles_total  -0.5355879  0.5355879
+8          receptions   0.4428340  0.4428340
+19   catch_efficiency   0.4063188  0.4063188
+5             carries  -0.1842852  0.1842852
+
+=== FEATURE IMPORTANCE (RANDOM FOREST) ===
+
+Random Forest Variable Importance (MeanDecreaseGini):
+                     %IncMSE IncNodePurity
+passing_yards      20.969788     2593523.9
+passing_tds        22.346970     3348225.0
+interceptions      17.305222      513936.7
+carries            27.888506     2725743.6
+rushing_yards      34.350317     3673823.0
+rushing_tds        19.681444     1281331.9
+receptions         31.890221     7088582.3
+receiving_yards    38.241963     7160664.3
+receiving_tds      20.192034     2146879.9
+position           10.194514      309092.9
+completions        18.562284     1846574.7
+pass_attempts      19.708965     1597562.3
+fumbles_total      14.240201     1628008.3
+passing_efficiency 13.558545      590368.6
+completion_rate    10.332888      524253.0
+catch_efficiency   23.793537     2105471.6
+rushing_efficiency 15.542574     1122165.6
+over_10rush_game    7.750537      286998.3
+
+*** DONE ***
