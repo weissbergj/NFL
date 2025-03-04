@@ -2,7 +2,7 @@
 
 **Authors:** Austin Bennett and Jared Weissberg
 
-In this repository, we analyze offensive player data in the NFL in R. Final results are presented up front. We utilize a ... model.
+In this repository, we analyze offensive player data in the NFL in R. Final results are presented up front. We utilize a robust, position-specific pipeline that compares linear, regularized, random-forest, and gradient-boosting models—incorporating hyperparameter tuning and year-based cross-validation—training on 2010–2020 data to predict 2022 fantasy performance.
 
 ## Table 1. Final 2021 (Effecitvely 2022 Predictions) Holdout Results by Position
 
