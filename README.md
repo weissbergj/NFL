@@ -97,8 +97,8 @@ Below is a brief description of each file:
 - [**robust1.log**](https://github.com/weissbergj/NFL/blob/main/robust1.log)  
   Contains the console output from running **robust.R**.
 
-- [**robust2.R**](https://github.com/weissbergj/NFL/blob/main/obust2.R)  
-  An unsuccessful attempt to do a significantly more robust hyperparemeter sweep using caret along with ensembling.
+- [**robust2.R**](https://github.com/weissbergj/NFL/blob/main/robust2.R)  
+  An unsuccessful attempt to do a significantly more robust hyperparameter sweep using caret along with ensembling.
 
 - [**robust2.log**](https://github.com/weissbergj/NFL/blob/main/robust2.log)  
   Contains the console output from running **robust2.R**.
