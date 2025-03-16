@@ -91,7 +91,7 @@ Below is a brief description of each file:
 - [**output2.log**](https://github.com/weissbergj/NFL/blob/main/output2.log)  
   Contains the console output from running **prediction2.R**.
 
-- [**robust.R**](https://github.com/weissbergj/NFL/blob/main/output.log)  
+- [**robust.R**](https://github.com/weissbergj/NFL/blob/main/robust.R)  
   The final model script that does individual position equations along with more robust features (e.g., injuries) from other datasets.
 
 - [**robust1.log**](https://github.com/weissbergj/NFL/blob/main/robust1.log)  
